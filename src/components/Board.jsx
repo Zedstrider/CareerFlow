@@ -17,9 +17,7 @@ export default function Board() {
       title: title,
       type: 'wishlist' // Default to the first column
     };
-
     const updatedWishlist = [...data.wishlist, newJobItem];
-
     setData({
       ...data,
       wishlist: updatedWishlist
@@ -28,6 +26,16 @@ export default function Board() {
     setNewJob("");
     setTitle("");
   }
+  function handleDelete(columnKey, jobId) {
+    // Get the current list for this column
+    const currentList = data[columnKey];
+    // Create a new list that keeps everything EXCEPT the matching jobId
+    const newList = currentList.filter((job) => job.id!=jobId );
+    setData({
+    ...data,
+    [columnKey]:newList
+    });
+ }
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">CareerFlow 🌊</h1>
@@ -53,6 +61,7 @@ export default function Board() {
         >
           Add
         </button>
+
       </div>
       {/*The Board Columns */}
       <div className="grid grid-cols-4 gap-4">
@@ -61,6 +70,7 @@ export default function Board() {
              key={key} 
              title={key} 
              jobs={data[key]} 
+             onDelete={(jobId) => handleDelete(key,jobId)}
           />
         ))}
       </div>

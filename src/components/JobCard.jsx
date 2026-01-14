@@ -1,11 +1,12 @@
-export default function JobCard({ job }) {
+export default function JobCard({ job,onDelete }) {
   return (
     // Card Container
     <div className="bg-white p-4 rounded-md shadow-sm border-2 border-transparent hover:border-blue-500 cursor-grab">
       <div className="flex justify-between items-start">
         {/* Job Position */}
         <h3 className="font-bold text-gray-800">{job.title || job.position}</h3>
-        <button className="text-gray-300 hover:text-red-500 transition-colors">
+        <button className="text-gray-300 hover:text-red-500 transition-colors"
+          onClick={()=>onDelete(job.id)}>
         🗑️
         </button>
         </div>

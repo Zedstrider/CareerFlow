@@ -1,6 +1,6 @@
 import JobCard from "./JobCard";
 
-export default function Column({ title, jobs }) {
+export default function Column({ title, jobs, onDelete }) {
   return (
     // Container for the column
     <div className="w-80 bg-gray-200 rounded-lg p-4 mr-4">
@@ -13,7 +13,7 @@ export default function Column({ title, jobs }) {
       {/* The List of Jobs */}
       <div className="space-y-3">
         {jobs.map((job) => (
-          <JobCard key={job.id} job={job} />
+          <JobCard key={job.id} job={job} onDelete={onDelete} />
         ))}
       </div>
     </div>
