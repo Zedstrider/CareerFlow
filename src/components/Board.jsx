@@ -1,13 +1,22 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import initialData from '../data/initialData';
 import Column from './Column';
 
 export default function Board() {
 // Initialize state with starting data
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState(()=>{
+    if(localStorage["jobTrackerData"])
+      return JSON.parse(localStorage["jobTrackerData"]);
+    else 
+      return initialData;
+    });
   const [newJob, setNewJob] = useState("");
   const [title, setTitle] = useState("");
   const columnKeys = Object.keys(data);
+
+  useEffect(()=>{
+    localStorage.setItem("jobTrackerData", JSON.stringify(data));
+  },[data]);
   // Function to handle adding a new job
   function handleAddJob() {
     if (!newJob || !title) return;
