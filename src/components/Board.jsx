@@ -3,7 +3,6 @@ import initialData from '../data/initialData';
 import Column from './Column';
 
 export default function Board() {
-// Initialize state with starting data
   const [data, setData] = useState(()=>{
     if(localStorage["jobTrackerData"])
       return JSON.parse(localStorage["jobTrackerData"]);
@@ -44,7 +43,31 @@ export default function Board() {
     ...data,
     [columnKey]:newList
     });
- }
+  }
+  function handleDrop(jobId, destinationColumn) {
+    //Find which column the job is currently in
+    const sourceColumn = Object.keys(data).find(key => 
+      data[key].find(job => job.id === jobId)
+    );
+    
+    if (!sourceColumn) return; 
+
+    //Get the job object itself
+    const jobToMove = data[sourceColumn].find(job => job.id === jobId);
+
+    // Remove it from the old column
+    const newSourceList = data[sourceColumn].filter(job => job.id !== jobId);
+
+    // Add it to the new column
+    const newDestinationList = [...data[destinationColumn], jobToMove];
+
+    // Update the state!
+    setData({
+      ...data,
+      [sourceColumn]: newSourceList,
+      [destinationColumn]: newDestinationList
+    });
+  }
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">CareerFlow 🌊</h1>
@@ -80,6 +103,7 @@ export default function Board() {
              title={key} 
              jobs={data[key]} 
              onDelete={(jobId) => handleDelete(key,jobId)}
+             onDrop={handleDrop}
           />
         ))}
       </div>
