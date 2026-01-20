@@ -1,6 +1,6 @@
 import JobCard from "./JobCard";
 
-export default function Column({ title, jobs, onDelete, onDrop }) {
+export default function Column({ title, jobs, onDelete, onDrop, onEdit }) {
   function handleDragOver(e) {
   e.preventDefault(); // This says "Allow dropping here!"
   }
@@ -23,7 +23,11 @@ export default function Column({ title, jobs, onDelete, onDrop }) {
       {/* The List of Jobs */}
       <div className="space-y-3">
         {jobs.map((job) => (
-          <JobCard key={job.id} job={job} onDelete={onDelete} />
+          <JobCard 
+            key={job.id} 
+            job={job} 
+            onDelete={onDelete} 
+            onEdit={(jobId, newTitle, newCompany) => onEdit(title, jobId, newTitle, newCompany)}/>
         ))}
       </div>
     </div>

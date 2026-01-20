@@ -61,11 +61,28 @@ export default function Board() {
     // Add it to the new column
     const newDestinationList = [...data[destinationColumn], jobToMove];
 
-    // Update the state!
+    // Update the state
     setData({
       ...data,
       [sourceColumn]: newSourceList,
       [destinationColumn]: newDestinationList
+    });
+  }
+  function handleEditJob(columnKey, jobId, newTitle, newCompany) {
+    const columnJobs = data[columnKey];
+    
+    // Create a new list with the updated job
+    const updatedJobs = columnJobs.map((job) => {
+      if (job.id === jobId) {
+        // Return a copy of the job with new details
+        return { ...job, title: newTitle, company: newCompany };
+      }
+      return job; // Keep other jobs the same
+    });
+
+    setData({
+      ...data,
+      [columnKey]: updatedJobs
     });
   }
   return (
@@ -104,6 +121,7 @@ export default function Board() {
              jobs={data[key]} 
              onDelete={(jobId) => handleDelete(key,jobId)}
              onDrop={handleDrop}
+             onEdit={handleEditJob}
           />
         ))}
       </div>
