@@ -2,11 +2,13 @@ require('dotenv').config(); //Load the.env file
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const jobsRoutes=require('./routes/jobs');
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use('/api/jobs', jobsRoutes);
 
 //Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)

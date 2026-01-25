@@ -3,19 +3,34 @@ import initialData from '../data/initialData';
 import Column from './Column';
 
 export default function Board() {
-  const [data, setData] = useState(()=>{
-    if(localStorage["jobTrackerData"])
-      return JSON.parse(localStorage["jobTrackerData"]);
-    else 
-      return initialData;
+  const [data, setData] = useState({
+    wishlist: [],
+    applied: [],
+    interviewing: [],
+    rejected: []
     });
   const [newJob, setNewJob] = useState("");
   const [title, setTitle] = useState("");
   const columnKeys = Object.keys(data);
 
-  useEffect(()=>{
-    localStorage.setItem("jobTrackerData", JSON.stringify(data));
-  },[data]);
+  useEffect(() => {
+    fetch('http://localhost:5000/api/jobs')
+      .then(res => res.json())
+      .then(fetchedJobs => {
+        // The Reduce Function to sort jobs into columns
+        const organizedJobs = fetchedJobs.reduce((acc, job) => {
+          // If the status matches one of the columns (e.g., 'wishlist'), add it
+          if (acc[job.status]) {
+            acc[job.status].push(job);
+          }
+          return acc;
+        }, { wishlist: [], applied: [], interviewing: [], rejected: [] });
+
+        // Update the state with the organized object
+        setData(organizedJobs);
+      })
+      .catch(err => console.error("Error fetching jobs:", err));
+  }, []);
   // Function to handle adding a new job
   function handleAddJob() {
     if (!newJob || !title) return;
