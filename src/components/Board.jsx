@@ -1,5 +1,4 @@
 import { useState,useEffect } from 'react';
-import initialData from '../data/initialData';
 import Column from './Column';
 
 export default function Board() {
@@ -34,20 +33,29 @@ export default function Board() {
   // Function to handle adding a new job
   function handleAddJob() {
     if (!newJob || !title) return;
-    const newJobItem = {
-      id: Date.now(), // Simple unique ID
-      company: newJob,
-      title: title,
-      type: 'wishlist' // Default to the first column
-    };
-    const updatedWishlist = [...data.wishlist, newJobItem];
-    setData({
-      ...data,
-      wishlist: updatedWishlist
+
+    fetch('http://localhost:5000/api/jobs', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        company: newJob,
+        title: title
+      })
+    })
+    .then(res => res.json())
+    .then(savedJob => {
+      // Add the new job to the 'wishlist' column in our state
+      const updatedWishlist = [...data.wishlist, savedJob];
+      setData({
+        ...data,
+        wishlist: updatedWishlist
+      });
+      // Clear the inputs
+      setNewJob("");
+      setTitle("");
     });
-    // Clear inputs after adding
-    setNewJob("");
-    setTitle("");
   }
   function handleDelete(columnKey, jobId) {
     // Get the current list for this column
