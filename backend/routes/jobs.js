@@ -27,4 +27,19 @@ router.post('/', async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+
+router.put('/:id', async (req,res)=>{
+  const {status}=req.body;
+  const jobId=req.params.id;
+  try{
+    const updatedJob = await Job.findByIdAndUpdate(
+      jobId,
+      {status: status},
+      {new:true}// This option tells Mongoose to return the updated version
+    );
+    res.json(updatedJob);
+  }catch(err){
+    res.status(500).json({message:err.message});
+  }
+})
 module.exports=router;

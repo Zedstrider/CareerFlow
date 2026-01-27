@@ -16,6 +16,7 @@ export default function Board() {
     fetch('http://localhost:5000/api/jobs')
       .then(res => res.json())
       .then(fetchedJobs => {
+        console.log(fetchedJobs);
         // The Reduce Function to sort jobs into columns
         const organizedJobs = fetchedJobs.reduce((acc, job) => {
           // If the status matches one of the columns (e.g., 'wishlist'), add it
@@ -25,6 +26,7 @@ export default function Board() {
           return acc;
         }, { wishlist: [], applied: [], interviewing: [], rejected: [] });
 
+        console.log(data);
         // Update the state with the organized object
         setData(organizedJobs);
       })
@@ -61,7 +63,7 @@ export default function Board() {
     // Get the current list for this column
     const currentList = data[columnKey];
     // Create a new list that keeps everything EXCEPT the matching jobId
-    const newList = currentList.filter((job) => job.id!=jobId );
+    const newList = currentList.filter((job) => job._id!=jobId );
     setData({
     ...data,
     [columnKey]:newList
@@ -70,16 +72,16 @@ export default function Board() {
   function handleDrop(jobId, destinationColumn) {
     //Find which column the job is currently in
     const sourceColumn = Object.keys(data).find(key => 
-      data[key].find(job => job.id === jobId)
+      data[key].find(job => job._id === jobId)
     );
     
     if (!sourceColumn) return; 
 
     //Get the job object itself
-    const jobToMove = data[sourceColumn].find(job => job.id === jobId);
+    const jobToMove = data[sourceColumn].find(job => job._id === jobId);
 
     // Remove it from the old column
-    const newSourceList = data[sourceColumn].filter(job => job.id !== jobId);
+    const newSourceList = data[sourceColumn].filter(job => job._id !== jobId);
 
     // Add it to the new column
     const newDestinationList = [...data[destinationColumn], jobToMove];
@@ -90,13 +92,23 @@ export default function Board() {
       [sourceColumn]: newSourceList,
       [destinationColumn]: newDestinationList
     });
+
+    fetch(`http://localhost:5000/api/jobs/${jobId}`,{
+      method:'PUT',
+      headers:{
+        'Content-Type':'application/json'
+      },
+      body:JSON.stringify({
+        status:destinationColumn
+      })
+    });
   }
   function handleEditJob(columnKey, jobId, newTitle, newCompany) {
     const columnJobs = data[columnKey];
     
     // Create a new list with the updated job
     const updatedJobs = columnJobs.map((job) => {
-      if (job.id === jobId) {
+      if (job._id === jobId) {
         // Return a copy of the job with new details
         return { ...job, title: newTitle, company: newCompany };
       }

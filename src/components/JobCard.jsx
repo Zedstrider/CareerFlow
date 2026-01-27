@@ -12,7 +12,7 @@ export default function JobCard({ job,onDelete, onEdit }) {
     <div 
       className="bg-white p-4 rounded-md shadow-sm border-2 border-transparent hover:border-blue-500 cursor-grab"
       draggable="true"
-      onDragStart={(e) => handleDragStart(e, job.id)}
+      onDragStart={(e) => handleDragStart(e, job._id)}
     >
       {isEditing ? (
         // EDIT MODE
@@ -37,7 +37,7 @@ export default function JobCard({ job,onDelete, onEdit }) {
               <button 
                 className="bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600"
                 onClick={() => {
-                    onEdit(job.id, editTitle, editCompany);
+                    onEdit(job._id, editTitle, editCompany);
                     setIsEditing(false);
                 }}
               >
@@ -56,7 +56,7 @@ export default function JobCard({ job,onDelete, onEdit }) {
                <button onClick={() => setIsEditing(true)}>✏️</button>
                <button 
                  className="text-gray-300 hover:text-red-500 transition-colors"
-                 onClick={() => onDelete(job.id)}
+                 onClick={() => onDelete(job._id)}
                >
                  🗑️
                </button>

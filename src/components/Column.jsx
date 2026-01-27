@@ -7,7 +7,7 @@ export default function Column({ title, jobs, onDelete, onDrop, onEdit }) {
   function handleDropEvent(e) {
     e.preventDefault();
     // Get the ID stored on the "sticky note"
-    const jobId = Number(e.dataTransfer.getData("jobId")); 
+    const jobId = e.dataTransfer.getData("jobId"); 
     // Call the Board's function
     onDrop(jobId, title);
   }
@@ -24,7 +24,7 @@ export default function Column({ title, jobs, onDelete, onDrop, onEdit }) {
       <div className="space-y-3">
         {jobs.map((job) => (
           <JobCard 
-            key={job.id} 
+            key={job._id} 
             job={job} 
             onDelete={onDelete} 
             onEdit={(jobId, newTitle, newCompany) => onEdit(title, jobId, newTitle, newCompany)}/>
