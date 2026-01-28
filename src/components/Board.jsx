@@ -68,6 +68,7 @@ export default function Board() {
     ...data,
     [columnKey]:newList
     });
+    fetch(`http://localhost:5000/api/jobs/${jobId}`, { method: 'DELETE' });
   }
   function handleDrop(jobId, destinationColumn) {
     //Find which column the job is currently in

@@ -41,5 +41,15 @@ router.put('/:id', async (req,res)=>{
   }catch(err){
     res.status(500).json({message:err.message});
   }
-})
+});
+
+router.delete('/:id', async(req,res)=>{
+  const jobId=req.params.id;
+  try{
+    await Job.findByIdAndDelete(jobId);
+    res.json({message:"Job deleted succesfully"})
+  }catch(err){
+      res.status(500).json({message:err.message});
+  }
+} )
 module.exports=router;
