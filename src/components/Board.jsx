@@ -13,7 +13,7 @@ export default function Board() {
   const columnKeys = Object.keys(data);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/jobs')
+    fetch('https://career-flow-tau.vercel.app/api/jobs')
       .then(res => res.json())
       .then(fetchedJobs => {
         console.log(fetchedJobs);
@@ -36,7 +36,7 @@ export default function Board() {
   function handleAddJob() {
     if (!newJob || !title) return;
 
-    fetch('http://localhost:5000/api/jobs', {
+    fetch('https://career-flow-tau.vercel.app/api/jobs', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -68,7 +68,7 @@ export default function Board() {
     ...data,
     [columnKey]:newList
     });
-    fetch(`http://localhost:5000/api/jobs/${jobId}`, { method: 'DELETE' });
+    fetch(`https://career-flow-tau.vercel.app/api/jobs/${jobId}`, { method: 'DELETE' });
   }
   function handleDrop(jobId, destinationColumn) {
     //Find which column the job is currently in
@@ -94,7 +94,7 @@ export default function Board() {
       [destinationColumn]: newDestinationList
     });
 
-    fetch(`http://localhost:5000/api/jobs/${jobId}`,{
+    fetch(`https://career-flow-tau.vercel.app/api/jobs/${jobId}`,{
       method:'PUT',
       headers:{
         'Content-Type':'application/json'
